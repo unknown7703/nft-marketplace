@@ -4,7 +4,7 @@ import { create as ipfsHttpClient } from 'ipfs-http-client'
 import { useRouter } from 'next/router'
 import Web3Modal from 'web3modal'
 
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
+const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0/add')
 
 import {
     nftaddress, nftmarketaddress
@@ -52,7 +52,7 @@ export default function CreateItem () {
         }
     }
 
-    async function createSale() {
+    async function createSale(url) {
         const web3Modal = new Web3Modal()
         const connection = await web3Modal.connect()
         const provider = new ethers.providers.Web3Provider(connection)
@@ -72,6 +72,42 @@ export default function CreateItem () {
         let listingPrice = await contract.getListingPrice()
         listin
     }
+    return (
+
+        <div className="flex justify-center ">
+            <div className="w-1/2 flex flex-col pb-12  drop-shadow-md">
+                <input
+                    placeholder="Asset Name"
+                    className="mt-8 border rounded p-4"
+                    onChange={e => updateFormInput({ ...formInput, name: e.target.value })}
+                />
+                <textarea
+                    placeholder="Asset Description"
+                    className="mt-2 border rounded p-4"
+                    onChange={e => updateFormInput({ ...formInput, description: e.target.value })}
+                />
+                <input
+                    placeholder="Customers Address"
+                    className="mt-2 border rounded p-4"
+                    onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
+                />
+                <input
+                    type="file"
+                    name="Asset"
+                    className="my-4"
+                    onChange={onChange}
+                />
+                {
+                    fileUrl && (
+                        <img className="rounded mt-4" width="350" src={fileUrl} />
+                    )
+                }
+                <button onClick={createSale} className="font-bold mt-4 bg-blue-600 text-white rounded p-4 shadow-lg">
+                    Create NFT
+                </button>
+            </div>
+        </div>
+    )
 }
 
 
